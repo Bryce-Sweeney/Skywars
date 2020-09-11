@@ -12,10 +12,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.IOException;
+
 public class SkywarsCreate implements CommandExecutor {
     //Variables
     private Main plugin;
-    public static ItemStack[] PlayerInventory;
 
     //Constructor
     public SkywarsCreate(Main plugin) {
@@ -39,34 +40,23 @@ public class SkywarsCreate implements CommandExecutor {
 
         //Checks if args is long enough
         if (player.hasPermission("sw.use")) {
-            if (args.length != 2) {
+            if (args.length != 1) {
                 return false;
             }
             //Checks if player entered create
             if (args[0].equals("create")) {
-                //Checks if they're creating a lobby, arena, or game
-                if (args[1].equals("lobby")) {
-                    //Lobby Creation Code
-                    for (int i = 0; i < 36; i++) {
-                        plugin.getDataConfig().set("players." + player.getUniqueId() + ".savedInv." + String.valueOf(i), player.getInventory().getItem(i));
-                    }
-                    player.getInventory().clear();
-                    plugin.getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", true);
-                    player.getInventory().setItem(35, abort);
-
-                    return true;
-                } else if (args[1].equals("arena")) {
-                    //Arena Creation Code
-                    player.sendMessage(Utils.chat("&aThis feature has not been implemented yet, sorry!"));
-                    return true;
-                } else if (args[1].equals("game")) {
-                    //Game Creation Code
-                    player.sendMessage(Utils.chat("&aThis feature has not been implemented yet, sorry!"));
-                    return true;
-                } else {
-                    //Didn't enter a valid number
-                    return false;
+                //Sets them in gui mode
+                plugin.getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", "yes");
+                //Clears their inventory and adds menu's
+                player.getInventory().clear();
+                player.getInventory().setItem(8, abort);
+                //Saves
+                try {
+                    plugin.getDataConfig().save(plugin.getDataFile());
+                } catch (IOException error) {
+                    error.printStackTrace();
                 }
+                return true;
             } else if (args[0].equals("delete")) {
                 player.sendMessage(Utils.chat("&aThis feature has not been implemented yet, sorry!"));
                 return true;

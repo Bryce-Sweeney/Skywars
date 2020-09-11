@@ -23,10 +23,10 @@ public class SavePlayer implements Listener {
     //Event Handler
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        Player player = (Player) e.getPlayer();
-        if (plugin.getDataConfig().get("players." + player.getUniqueId() + ".inCreationGui") == null) {
-            plugin.getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", false);
-        }
+        Player player = e.getPlayer();
+        plugin.getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", "no");
+        if (plugin.getDataConfig().get("players." + player.getUniqueId() + ".name") == null)
+            plugin.getDataConfig().set("players." + player.getUniqueId() + ".name", player.getName());
         try {
             plugin.getDataConfig().save(plugin.getDataFile());
         } catch (IOException error) {

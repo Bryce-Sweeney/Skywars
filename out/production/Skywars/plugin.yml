@@ -14,5 +14,5 @@ commands:
   sw:
     description: Helps admins create skywars lobbys.
     aliases: [skyw, skywars, swars]
-    usage: /sw [create/delete] [lobby/arena/game]
+    usage: /sw [create/delete]
     permission: sw.use

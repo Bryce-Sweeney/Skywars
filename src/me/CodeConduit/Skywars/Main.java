@@ -2,6 +2,8 @@ package me.CodeConduit.Skywars;
 
 import me.CodeConduit.Skywars.commands.SkywarsCreate;
 import me.CodeConduit.Skywars.listeners.ClickListener;
+import me.CodeConduit.Skywars.listeners.PlayerInteractListener;
+import me.CodeConduit.Skywars.listeners.SavePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -12,7 +14,7 @@ import java.io.IOException;
 
 public class Main extends JavaPlugin {
     //Variables
-    private File dataFile = new File(getDataFolder(), "playerdata.yml");
+    private File dataFile = new File(getDataFolder(), "data.yml");
     private FileConfiguration dataConfig = YamlConfiguration.loadConfiguration(dataFile);
 
     //Enables when the plugin is enabled
@@ -38,6 +40,8 @@ public class Main extends JavaPlugin {
         if (enable) {
             //Enable classes here
             new ClickListener(this);
+            new SavePlayer(this);
+            new PlayerInteractListener(this);
         }
     }
     //Method for enabling commands
@@ -54,13 +58,5 @@ public class Main extends JavaPlugin {
     }
     public File getDataFile() {
         return dataFile;
-    }
-
-    //Ease of use getters for data
-    public boolean getPlayerInGui(Player player) {
-        return (boolean) getDataConfig().get("players." + player.getUniqueId() + ".inCreationGui");
-    }
-    public void setPlayerInGui(Player player, boolean bool) {
-        getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", bool);
     }
 }
