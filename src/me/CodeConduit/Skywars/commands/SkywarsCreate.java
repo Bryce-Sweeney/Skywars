@@ -40,13 +40,15 @@ public class SkywarsCreate implements CommandExecutor {
 
         //Checks if args is long enough
         if (player.hasPermission("sw.use")) {
-            if (args.length != 1) {
+            if (args.length != 2) {
                 return false;
             }
             //Checks if player entered create
             if (args[0].equals("create")) {
                 //Sets them in gui mode
                 plugin.getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", "yes");
+                plugin.getDataConfig().set("arenas." + args[1] + ".author", player.getName());
+                plugin.getDataConfig().set("players." + player.getUniqueId() + ".workingOn", args[1]);
                 //Clears their inventory and adds menu's
                 player.getInventory().clear();
                 player.getInventory().setItem(8, abort);
@@ -58,7 +60,9 @@ public class SkywarsCreate implements CommandExecutor {
                 }
                 return true;
             } else if (args[0].equals("delete")) {
-                player.sendMessage(Utils.chat("&aThis feature has not been implemented yet, sorry!"));
+                //Deletes yml section for an arena
+
+
                 return true;
             } else {
                 return false;

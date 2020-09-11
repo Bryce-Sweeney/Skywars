@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -13,6 +14,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.io.IOException;
 
 public class PlayerInteractListener implements Listener {
     //Variables
@@ -27,6 +30,8 @@ public class PlayerInteractListener implements Listener {
     //Event handler
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        
         //Abort Button ItemStack Copypasta
         ItemStack abort = new ItemStack(Material.GRAY_DYE);
         ItemMeta abortMeta = abort.getItemMeta();
@@ -37,17 +42,23 @@ public class PlayerInteractListener implements Listener {
 
 
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (e.getPlayer().getInventory().getItemInHand().equals(abort)) {
+            if (player.getInventory().getItemInHand().equals(abort)) {
                 //Turn off gui mode
-                plugin.getDataConfig().set("players." + e.getPlayer().getUniqueId() + ".inCreationGui", "no");
+                plugin.getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", "no");
                 //Restore inventory
-                e.getPlayer().getInventory().clear();
+                player.getInventory().clear();
                 for (int i = 0; i < 36; i++) {
-                    e.getPlayer().getInventory().setItem(i, (ItemStack) plugin.getDataConfig().get("players." + e.getPlayer().getUniqueId() + ".savedInv." + i));
+                    player.getInventory().setItem(i, (ItemStack) plugin.getDataConfig().get("players." + player.getUniqueId() + ".savedInv." + i));
                 }
+                //Delete yaml
+                plugin.getDataConfig().set("arenas." + plugin.getDataConfig().get("players." + player.getUniqueId() + ".workingOn"), null);
+
                 //Notify player
-                e.getPlayer().sendMessage(Utils.chat("&6&lSkywars game creation cancelled."));
-                e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+                player.sendMessage(Utils.chat("&6&lSkywars game creation cancelled."));
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+
+                //Save
+
             }
         }
     }
