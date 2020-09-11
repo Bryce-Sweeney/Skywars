@@ -4,6 +4,7 @@ import me.CodeConduit.Skywars.commands.SkywarsCreate;
 import me.CodeConduit.Skywars.listeners.ClickListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class Main extends JavaPlugin {
     //Enables when the plugin is disabled
     public void onDisable() {
         try {
-            getPlayerDataConfig().save(getPlayerDataFile());
+            getDataConfig().save(getDataFile());
         } catch (IOException error) {
             error.printStackTrace();
         }
@@ -47,11 +48,19 @@ public class Main extends JavaPlugin {
         }
     }
 
-    //Getters for playerData
-    public FileConfiguration getPlayerDataConfig() {
+    //Getters for data
+    public FileConfiguration getDataConfig() {
         return dataConfig;
     }
-    public File getPlayerDataFile() {
+    public File getDataFile() {
         return dataFile;
+    }
+
+    //Ease of use getters for data
+    public boolean getPlayerInGui(Player player) {
+        return (boolean) getDataConfig().get("players." + player.getUniqueId() + ".inCreationGui");
+    }
+    public void setPlayerInGui(Player player, boolean bool) {
+        getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", bool);
     }
 }

@@ -15,7 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class SkywarsCreate implements CommandExecutor {
     //Variables
     private Main plugin;
-    public static boolean inGui = false;
     public static ItemStack[] PlayerInventory;
 
     //Constructor
@@ -48,8 +47,11 @@ public class SkywarsCreate implements CommandExecutor {
                 //Checks if they're creating a lobby, arena, or game
                 if (args[1].equals("lobby")) {
                     //Lobby Creation Code
-
-                    inGui = true;
+                    for (int i = 0; i < 36; i++) {
+                        plugin.getDataConfig().set("players." + player.getUniqueId() + ".savedInv." + String.valueOf(i), player.getInventory().getItem(i));
+                    }
+                    player.getInventory().clear();
+                    plugin.getDataConfig().set("players." + player.getUniqueId() + ".inCreationGui", true);
                     player.getInventory().setItem(35, abort);
 
                     return true;

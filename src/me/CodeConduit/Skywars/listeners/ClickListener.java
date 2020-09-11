@@ -15,6 +15,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.IOException;
+
 public class ClickListener implements Listener {
     //Variables
     private Main plugin;
@@ -40,12 +42,22 @@ public class ClickListener implements Listener {
         abortMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         abort.setItemMeta(abortMeta);
 
-        if (SkywarsCreate.inGui) {
+        if (plugin.getPlayerInGui(player)) {
             if (e.isRightClick()) {
                 if (player.getItemOnCursor().equals(abort)) {
-                    SkywarsCreate.inGui = false;
+                    player.getInventory().clear();
+                    for (int i = 0; i < 36; i++) {
+                        player.getInventory().setItem(i, (ItemStack) plugin.getDataConfig().get("players." + player.getUniqueId() + ".savedInv." + i));
+                    }
+
+                    plugin.setPlayerInGui(player, false);
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
                     player.sendMessage(Utils.chat("&b&lCancelled creation!"));
+                }
+                try {
+                    plugin.getDataConfig().save(plugin.getDataFile());
+                } catch (IOException error) {
+                    error.printStackTrace();
                 }
             }
             e.setCancelled(true);
