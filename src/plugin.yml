@@ -13,6 +13,6 @@ permissions:
 commands:
   sw:
     description: Helps admins create skywars lobbys.
-    aliases: [skyw, skywars, swars]
+    aliases: [skywars]
     usage: /sw [create/delete] [name]
     permission: sw.use
