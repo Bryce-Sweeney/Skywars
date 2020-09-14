@@ -36,7 +36,10 @@ public class PlaceCancel implements Listener {
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + plugin.getDataConfig().get("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"), location);
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount") + 1);
             } else if (e.getBlockPlaced().getType().equals(Material.CHEST)) {
-
+                e.setCancelled(false);
+                //Do yaml configuration
+                plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChests." + plugin.getDataConfig().get("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"), location);
+                plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChestCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount") + 1);
             }
         }
         //Save

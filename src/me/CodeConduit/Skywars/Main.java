@@ -34,6 +34,9 @@ public class Main extends JavaPlugin {
     public static ItemStack boxSpawnSelect = new ItemStack(Material.DEAD_FIRE_CORAL_BLOCK);
     public static ItemMeta boxSpawnSelectMeta = boxSpawnSelect.getItemMeta();
 
+    public static ItemStack islandChestSelect = new ItemStack(Material.CHEST);
+    public static ItemMeta islandChestSelectMeta = islandChestSelect.getItemMeta();
+
     //Enables when the plugin is enabled
     public void onEnable() {
         //Perform actions on itemMeta
@@ -47,10 +50,15 @@ public class Main extends JavaPlugin {
         spawnSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         spawnSelect.setItemMeta(spawnSelectMeta);
 
-        boxSpawnSelectMeta.setDisplayName(Utils.chat("&6&lSpawn Locations"));
+        boxSpawnSelectMeta.setDisplayName(Utils.chat("&c&lSpawn Locations"));
         boxSpawnSelectMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
         boxSpawnSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         boxSpawnSelect.setItemMeta(boxSpawnSelectMeta);
+
+        islandChestSelectMeta.setDisplayName(Utils.chat("&c&lIsland Chests"));
+        islandChestSelectMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        islandChestSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        islandChestSelect.setItemMeta(islandChestSelectMeta);
 
         //Enable plugins
         if (!dataFile.exists()) {

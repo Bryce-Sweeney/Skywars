@@ -44,6 +44,7 @@ public class SkywarsCreate implements CommandExecutor {
                     player.getInventory().setItem(8, Main.abort);
                     player.getInventory().setItem(0, Main.spawnSelect);
                     player.getInventory().setItem(2, Main.boxSpawnSelect);
+                    player.getInventory().setItem(3, Main.islandChestSelect);
                     //Save
                     try {
                         plugin.getDataConfig().save(plugin.getDataFile());

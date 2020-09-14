@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 
 public class PlayerInteractListener implements Listener {
@@ -31,10 +32,18 @@ public class PlayerInteractListener implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         Location targetLoc = player.getTargetBlock((Set<Material>) null, 100).getLocation();
+        Location dummyLocation;
 
         //Abort Block
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (player.getInventory().getItemInHand().equals(Main.abort)) {
+                //Delete placed blocks
+                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); i++) {
+                    Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + i)).getBlock().setType(Material.AIR);
+                }
+                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
+                    Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i)).getBlock().setType(Material.AIR);
+                }
                 //Take out of gui mode and delete arena file
                 plugin.getDataConfig().set("players." + player.getUniqueId() + ".inGuiMode", false);
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player), null);
@@ -69,11 +78,30 @@ public class PlayerInteractListener implements Listener {
         //Breaking Box Spawns
         if (e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             if (e.getClickedBlock().getType().equals(Material.DEAD_FIRE_CORAL_BLOCK)) {
-                //Delete block
-                e.getClickedBlock().setType(Material.AIR);
                 //Remove data for block
-                plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount") - 1);
-                plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + plugin.getDataConfig().get("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"), null);
+                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); i++) {
+                    e.getClickedBlock().setType(Material.AIR);
+                    plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount") - 1);
+                    plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + i, null);
+                    for (int j = i + 1; j <= plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); j++) {
+                        dummyLocation = plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + j);
+                        plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + j, null);
+                        plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + (j-1), dummyLocation);
+                    }
+                }
+            } else if (e.getClickedBlock().getType().equals(Material.CHEST)) {
+                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
+                    if (e.getClickedBlock().getLocation().equals(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i))) {
+                        e.getClickedBlock().setType(Material.AIR);
+                        plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChestCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount") - 1);
+                        plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i, null);
+                        for (int j = i + 1; j <= plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); j++) {
+                            dummyLocation = plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + j);
+                            plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChests." + j, null);
+                            plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChests." + (j-1), dummyLocation);
+                        }
+                    }
+                }
             }
         }
 
