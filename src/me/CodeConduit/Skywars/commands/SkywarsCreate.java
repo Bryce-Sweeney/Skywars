@@ -40,13 +40,15 @@ public class SkywarsCreate implements CommandExecutor {
                     plugin.getDataConfig().set("arenas." + args[1] + ".boxSpawnCount", 0);
                     plugin.getDataConfig().set("arenas." + args[1] + ".islandChestCount", 0);
                     plugin.getDataConfig().set("arenas." + args[1] + ".middleChestCount", 0);
+                    plugin.getDataConfig().set("arenas." + args[1] + ".isSolo", true);
                     //Give player items
                     player.getInventory().clear();
                     player.getInventory().setItem(8, Main.abort);
                     player.getInventory().setItem(0, Main.spawnSelect);
-                    player.getInventory().setItem(2, Main.boxSpawnSelect);
-                    player.getInventory().setItem(3, Main.islandChestSelect);
-                    player.getInventory().setItem(4, Main.middleChestSelect);
+                    player.getInventory().setItem(1, Main.soloMode);
+                    player.getInventory().setItem(3, Main.boxSpawnSelect);
+                    player.getInventory().setItem(4, Main.islandChestSelect);
+                    player.getInventory().setItem(5, Main.middleChestSelect);
                     //Save
                     try {
                         plugin.getDataConfig().save(plugin.getDataFile());

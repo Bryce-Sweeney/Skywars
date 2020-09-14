@@ -37,8 +37,14 @@ public class Main extends JavaPlugin {
     public static ItemStack islandChestSelect = new ItemStack(Material.CHEST);
     public static ItemMeta islandChestSelectMeta = islandChestSelect.getItemMeta();
 
-    public static ItemStack middleChestSelect = new ItemStack(Material.ENDER_CHEST);
+    public static ItemStack middleChestSelect = new ItemStack(Material.TRAPPED_CHEST);
     public static ItemMeta middleChestSelectMeta = middleChestSelect.getItemMeta();
+
+    public static ItemStack soloMode = new ItemStack(Material.LIME_DYE);
+    public static ItemMeta soloModeMeta = soloMode.getItemMeta();
+
+    public static ItemStack duoMode = new ItemStack(Material.PINK_DYE);
+    public static ItemMeta duoModeMeta = soloMode.getItemMeta();
 
     //Enables when the plugin is enabled
     public void onEnable() {
@@ -67,6 +73,16 @@ public class Main extends JavaPlugin {
         middleChestSelectMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
         middleChestSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         middleChestSelect.setItemMeta(middleChestSelectMeta);
+
+        soloModeMeta.setDisplayName(Utils.chat("&6&lSolo Mode"));
+        soloModeMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        soloModeMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        soloMode.setItemMeta(soloModeMeta);
+
+        duoModeMeta.setDisplayName(Utils.chat("&6&lDuo Mode"));
+        duoModeMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        duoModeMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        duoMode.setItemMeta(duoModeMeta);
 
         //Enable plugins
         if (!dataFile.exists()) {

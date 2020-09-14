@@ -34,25 +34,42 @@ public class PlayerInteractListener implements Listener {
         Location dummyLocation;
 
         //Abort Block
-        if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (player.getInventory().getItemInHand().equals(Main.abort)) {
-                //Delete placed blocks
-                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); i++) {
-                    Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + i)).getBlock().setType(Material.AIR);
+        try {
+            if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                if (player.getInventory().getItemInHand().equals(Main.abort)) {
+                    //Delete placed blocks
+                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); i++) {
+                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + i)).getBlock().setType(Material.AIR);
+                    }
+                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
+                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i)).getBlock().setType(Material.AIR);
+                    }
+                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); i++) {
+                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i)).getBlock().setType(Material.AIR);
+                    }
+                    //Take out of gui mode and delete arena file
+                    plugin.getDataConfig().set("players." + player.getUniqueId() + ".inGuiMode", false);
+                    plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player), null);
+                    player.getInventory().clear();
+                    //Notify player
+                    player.sendMessage(Utils.chat("&6Skywars arena creation aborted."));
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
                 }
-                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
-                    Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i)).getBlock().setType(Material.AIR);
-                }
-                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); i++) {
-                    Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i)).getBlock().setType(Material.AIR);
-                }
-                //Take out of gui mode and delete arena file
-                plugin.getDataConfig().set("players." + player.getUniqueId() + ".inGuiMode", false);
-                plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player), null);
-                player.getInventory().clear();
-                //Notify player
-                player.sendMessage(Utils.chat("&6Skywars arena creation aborted."));
-                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+            }
+        } catch (NullPointerException error) {
+            error.printStackTrace();
+        }
+
+        //Duo/solo
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+            if (player.getInventory().getItemInHand().equals(Main.soloMode)) {
+                plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".isSolo", false);
+                player.getInventory().setItem(1, null);
+                player.getInventory().setItem(1, Main.duoMode);
+            } else if (player.getInventory().getItemInHand().equals(Main.duoMode)) {
+                plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".isSolo", true);
+                player.getInventory().setItem(1, null);
+                player.getInventory().setItem(1, Main.soloMode);
             }
         }
 
