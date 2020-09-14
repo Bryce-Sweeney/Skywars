@@ -2,6 +2,7 @@ package me.CodeConduit.Skywars.commands;
 
 import me.CodeConduit.Skywars.Main;
 import me.CodeConduit.Skywars.Utils;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,6 +50,7 @@ public class SkywarsCreate implements CommandExecutor {
                     player.getInventory().setItem(3, Main.boxSpawnSelect);
                     player.getInventory().setItem(4, Main.islandChestSelect);
                     player.getInventory().setItem(5, Main.middleChestSelect);
+                    player.getInventory().setItem(7, Main.confirm);
                     //Save
                     try {
                         plugin.getDataConfig().save(plugin.getDataFile());
@@ -57,6 +59,16 @@ public class SkywarsCreate implements CommandExecutor {
                     }
                     return true;
                 } else if (args[0].equals("delete")) {
+                    //Delete chests and spawns
+                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); i++) {
+                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + i)).getBlock().setType(Material.AIR);
+                    }
+                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
+                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i)).getBlock().setType(Material.AIR);
+                    }
+                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); i++) {
+                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i)).getBlock().setType(Material.AIR);
+                    }
                     //Deletes yaml path
                     plugin.getDataConfig().set("arenas." + args[1], null);
                     //Notify player

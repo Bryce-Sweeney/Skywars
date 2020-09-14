@@ -1,7 +1,7 @@
 main: me.CodeConduit.Skywars.Main
 name: Skywars
 author: Hazard Minigames
-version: 0.0.0
+version: 1.0.0
 description: The standart skywars plugin.
 api-version: 1.16
 
@@ -14,5 +14,5 @@ commands:
   sw:
     description: Helps admins create skywars lobbys.
     aliases: [skywars]
-    usage: /sw [create/delete] [name]
+    usage: /sw [create,delete] [name]
     permission: sw.use

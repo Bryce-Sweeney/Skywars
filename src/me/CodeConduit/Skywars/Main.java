@@ -1,9 +1,9 @@
 package me.CodeConduit.Skywars;
 
 import me.CodeConduit.Skywars.commands.SkywarsCreate;
+import me.CodeConduit.Skywars.listeners.PlayerInteractListener;
 import me.CodeConduit.Skywars.listeners.cancelling.BreakCancel;
 import me.CodeConduit.Skywars.listeners.cancelling.ClickCancel;
-import me.CodeConduit.Skywars.listeners.PlayerInteractListener;
 import me.CodeConduit.Skywars.listeners.cancelling.HitCancel;
 import me.CodeConduit.Skywars.listeners.cancelling.PlaceCancel;
 import org.bukkit.Material;
@@ -46,6 +46,9 @@ public class Main extends JavaPlugin {
     public static ItemStack duoMode = new ItemStack(Material.PINK_DYE);
     public static ItemMeta duoModeMeta = soloMode.getItemMeta();
 
+    public static ItemStack confirm = new ItemStack(Material.LIME_DYE);
+    public static ItemMeta confirmMeta = soloMode.getItemMeta();
+
     //Enables when the plugin is enabled
     public void onEnable() {
         //Perform actions on itemMeta
@@ -83,6 +86,11 @@ public class Main extends JavaPlugin {
         duoModeMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
         duoModeMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         duoMode.setItemMeta(duoModeMeta);
+
+        confirmMeta.setDisplayName(Utils.chat("&6&lConfirm"));
+        confirmMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        confirmMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        confirm.setItemMeta(confirmMeta);
 
         //Enable plugins
         if (!dataFile.exists()) {

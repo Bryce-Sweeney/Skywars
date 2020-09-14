@@ -22,7 +22,7 @@ public class HitCancel implements Listener {
     public void onHit(EntityDamageByEntityEvent e) {
         Player attacker = (Player) e.getDamager();
         Player victim = (Player) e.getEntity();
-        if ((boolean) plugin.getDataConfig().get("players." + victim.getUniqueId() + ".inGuiMode") || (boolean) plugin.getDataConfig().get("players." + attacker.getUniqueId() + ".inGuiMode"))
+        if (plugin.getDataConfig().getBoolean("players." + victim.getUniqueId() + ".inGuiMode") || plugin.getDataConfig().getBoolean("players." + attacker.getUniqueId() + ".inGuiMode"))
             e.setCancelled(true);
     }
 }

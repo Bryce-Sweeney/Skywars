@@ -1,6 +1,7 @@
 package me.CodeConduit.Skywars.listeners.cancelling;
 
 import me.CodeConduit.Skywars.Main;
+import me.CodeConduit.Skywars.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,16 +36,19 @@ public class PlaceCancel implements Listener {
                 //Do yaml configuration
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + plugin.getDataConfig().get("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"), location);
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount") + 1);
+                player.sendMessage(Utils.chat("&6Placed spawn point at&e " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()));
             } else if (e.getBlockPlaced().getType().equals(Material.CHEST)) {
                 e.setCancelled(false);
                 //Do yaml configuration
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChests." + plugin.getDataConfig().get("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"), location);
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChestCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount") + 1);
+                player.sendMessage(Utils.chat("&6Placed island chest point at&e " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()));
             } else if (e.getBlockPlaced().getType().equals(Material.TRAPPED_CHEST)) {
                 e.setCancelled(false);
                 //Do yaml configuration
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".middleChests." + plugin.getDataConfig().get("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"), location);
                 plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".middleChestCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount") + 1);
+                player.sendMessage(Utils.chat("&6Placed middle chest point at&e " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ()));
             }
         }
         //Save
