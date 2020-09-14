@@ -28,7 +28,6 @@ public class PlayerInteractListener implements Listener {
 
     //Event handler
     @EventHandler
-    @SuppressWarnings("unused")
     public void onInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         Location targetLoc = player.getTargetBlock((Set<Material>) null, 100).getLocation();
@@ -43,6 +42,9 @@ public class PlayerInteractListener implements Listener {
                 }
                 for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
                     Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i)).getBlock().setType(Material.AIR);
+                }
+                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); i++) {
+                    Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i)).getBlock().setType(Material.AIR);
                 }
                 //Take out of gui mode and delete arena file
                 plugin.getDataConfig().set("players." + player.getUniqueId() + ".inGuiMode", false);
@@ -99,6 +101,19 @@ public class PlayerInteractListener implements Listener {
                             dummyLocation = plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + j);
                             plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChests." + j, null);
                             plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".islandChests." + (j-1), dummyLocation);
+                        }
+                    }
+                }
+            } else if (e.getClickedBlock().getType().equals(Material.CHEST)) {
+                for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); i++) {
+                    if (e.getClickedBlock().getLocation().equals(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i))) {
+                        e.getClickedBlock().setType(Material.AIR);
+                        plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".middleChestCount", plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount") - 1);
+                        plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i, null);
+                        for (int j = i + 1; j <= plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); j++) {
+                            dummyLocation = plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + j);
+                            plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".middleChests." + j, null);
+                            plugin.getDataConfig().set("arenas." + plugin.getPlayerArena(player) + ".middleChests." + (j-1), dummyLocation);
                         }
                     }
                 }

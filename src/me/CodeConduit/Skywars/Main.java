@@ -37,6 +37,9 @@ public class Main extends JavaPlugin {
     public static ItemStack islandChestSelect = new ItemStack(Material.CHEST);
     public static ItemMeta islandChestSelectMeta = islandChestSelect.getItemMeta();
 
+    public static ItemStack middleChestSelect = new ItemStack(Material.ENDER_CHEST);
+    public static ItemMeta middleChestSelectMeta = middleChestSelect.getItemMeta();
+
     //Enables when the plugin is enabled
     public void onEnable() {
         //Perform actions on itemMeta
@@ -55,10 +58,15 @@ public class Main extends JavaPlugin {
         boxSpawnSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         boxSpawnSelect.setItemMeta(boxSpawnSelectMeta);
 
-        islandChestSelectMeta.setDisplayName(Utils.chat("&c&lIsland Chests"));
+        islandChestSelectMeta.setDisplayName(Utils.chat("&c&lIsland Chest"));
         islandChestSelectMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
         islandChestSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         islandChestSelect.setItemMeta(islandChestSelectMeta);
+
+        middleChestSelectMeta.setDisplayName(Utils.chat("&c&lMid Chest"));
+        middleChestSelectMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        middleChestSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        middleChestSelect.setItemMeta(middleChestSelectMeta);
 
         //Enable plugins
         if (!dataFile.exists()) {
