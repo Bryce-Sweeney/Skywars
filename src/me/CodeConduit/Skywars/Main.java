@@ -5,10 +5,12 @@ import me.CodeConduit.Skywars.listeners.cancelling.BreakCancel;
 import me.CodeConduit.Skywars.listeners.cancelling.ClickCancel;
 import me.CodeConduit.Skywars.listeners.PlayerInteractListener;
 import me.CodeConduit.Skywars.listeners.cancelling.HitCancel;
+import me.CodeConduit.Skywars.listeners.cancelling.PlaceCancel;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,7 +51,6 @@ public class Main extends JavaPlugin {
         boxSpawnSelectMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
         boxSpawnSelectMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         boxSpawnSelect.setItemMeta(boxSpawnSelectMeta);
-        boxSpawnSelect.setAmount(8);
 
         //Enable plugins
         if (!dataFile.exists()) {
@@ -75,6 +76,7 @@ public class Main extends JavaPlugin {
             new ClickCancel(this);
             new BreakCancel(this);
             new HitCancel(this);
+            new PlaceCancel(this);
             new PlayerInteractListener(this);
         }
     }
@@ -92,5 +94,8 @@ public class Main extends JavaPlugin {
     }
     public File getDataFile() {
         return dataFile;
+    }
+    public String getPlayerArena(Player player) {
+        return String.valueOf(getDataConfig().get("players." + player.getUniqueId() + ".currentArena"));
     }
 }

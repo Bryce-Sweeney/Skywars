@@ -2,6 +2,7 @@ package me.CodeConduit.Skywars.commands;
 
 import me.CodeConduit.Skywars.Main;
 import me.CodeConduit.Skywars.Utils;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -36,7 +37,8 @@ public class SkywarsCreate implements CommandExecutor {
                     plugin.getDataConfig().set("players." + player.getUniqueId() + ".currentArena", args[1]);
                     plugin.getDataConfig().set("arenas." + args[1] + ".creator", String.valueOf(player.getUniqueId()));
                     plugin.getDataConfig().set("arenas." + args[1] + ".world", player.getWorld().getName());
-                    plugin.getDataConfig().set("arenas." + args[1] + ".nextBoxID", 0);
+                    plugin.getDataConfig().set("arenas." + args[1] + ".boxSpawnCount", 0);
+                    plugin.getDataConfig().set("arenas." + args[1] + ".islandChestCount", 0);
                     //Give player items
                     player.getInventory().clear();
                     player.getInventory().setItem(8, Main.abort);
@@ -50,7 +52,18 @@ public class SkywarsCreate implements CommandExecutor {
                     }
                     return true;
                 } else if (args[0].equals("delete")) {
-                    return false;
+                    //Deletes yaml path
+                    plugin.getDataConfig().set("arenas." + args[1], null);
+                    //Notify player
+                    player.sendMessage(Utils.chat("&6Arena successfully deleted!"));
+                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+                    try {
+                        plugin.getDataConfig().save(plugin.getDataFile());
+                    } catch (IOException error) {
+                        error.printStackTrace();
+                    }
+                    //TODO: Make deletion dynamic
+                    return true;
                 } else {
                     return false;
                 }
