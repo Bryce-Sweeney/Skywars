@@ -20,7 +20,7 @@ public class SkywarsCreate implements CommandExecutor {
     public SkywarsCreate(Main plugin) {
         this.plugin = plugin;
 
-        Objects.requireNonNull(plugin.getCommand("sw")).setExecutor(this);
+        plugin.getCommand("sw").setExecutor(this);
     }
 
     @Override
@@ -43,7 +43,10 @@ public class SkywarsCreate implements CommandExecutor {
                     plugin.getDataConfig().set("arenas." + args[1] + ".middleChestCount", 0);
                     plugin.getDataConfig().set("arenas." + args[1] + ".isSolo", true);
                     //Give player items
-                    player.getInventory().clear();
+                    for (int i = 0; i < 36; i++) {
+                        if (!(player.getInventory().getItem(i) == null))
+                            player.getInventory().getItem(i).setAmount(0);
+                    }
                     player.getInventory().setItem(8, Main.abort);
                     player.getInventory().setItem(0, Main.spawnSelect);
                     player.getInventory().setItem(1, Main.soloMode);
@@ -60,27 +63,31 @@ public class SkywarsCreate implements CommandExecutor {
                     return true;
                 } else if (args[0].equals("delete")) {
                     //Delete chests and spawns
-                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); i++) {
-                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + i)).getBlock().setType(Material.AIR);
-                    }
-                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
-                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i)).getBlock().setType(Material.AIR);
-                    }
-                    for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); i++) {
-                        Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i)).getBlock().setType(Material.AIR);
-                    }
-                    //Deletes yaml path
-                    plugin.getDataConfig().set("arenas." + args[1], null);
-                    //Notify player
-                    player.sendMessage(Utils.chat("&6Arena successfully deleted!"));
-                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
                     try {
-                        plugin.getDataConfig().save(plugin.getDataFile());
-                    } catch (IOException error) {
-                        error.printStackTrace();
+                        for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".boxSpawnCount"); i++) {
+                            Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".boxSpawns." + i)).getBlock().setType(Material.AIR);
+                        }
+                        for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".islandChestCount"); i++) {
+                            Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".islandChests." + i)).getBlock().setType(Material.AIR);
+                        }
+                        for (int i = 0; i < plugin.getDataConfig().getInt("arenas." + plugin.getPlayerArena(player) + ".middleChestCount"); i++) {
+                            Objects.requireNonNull(plugin.getDataConfig().getLocation("arenas." + plugin.getPlayerArena(player) + ".middleChests." + i)).getBlock().setType(Material.AIR);
+                        }
+                        plugin.getDataConfig().set("arenas." + args[1], null);
+                        //Notify player
+                        player.sendMessage(Utils.chat("&6Arena successfully deleted!"));
+                        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+                        //Save
+                        try {
+                            plugin.getDataConfig().save(plugin.getDataFile());
+                        } catch (IOException error) {
+                            error.printStackTrace();
+                        }
+                        return true;
+                    } catch (NullPointerException e) {
+                        player.sendMessage(Utils.chat("&6That arena does not exist!"));
+                        return true;
                     }
-                    //TODO: Make deletion dynamic
-                    return true;
                 } else {
                     return false;
                 }
